@@ -3,12 +3,12 @@
 /__pycache__
 /data
 /ignore
+/zaphot
 
 # Formats
 *.pyc
 *.idea
 *.save
+*.swp
 
-# Specfics
-data_to_mysql.sh
-README.html
+# Specific Files
