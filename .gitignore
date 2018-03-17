@@ -1,0 +1,14 @@
+# Dir
+/.vscode
+/__pycache__
+/data
+/ignore
+
+# Formats
+*.pyc
+*.idea
+*.save
+
+# Specfics
+data_to_mysql.sh
+README.html
