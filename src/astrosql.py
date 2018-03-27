@@ -83,6 +83,15 @@ class AstroSQL:
         data = list(query.dicts())
         return data
 
+    def get_by_object(self, table, objname):
+        table = self.get_table(table)
+
+        query = table.select().where(table.objname == objname)
+        print(query.sql())
+
+        data = list(query.dicts())
+        return data
+
     def get_by_radec(self, table, ra, dec, radius):
         """
         Get data from SQL database within a square area of the sky determined by ra, dec, radius.
@@ -99,8 +108,8 @@ class AstroSQL:
             )
         except AttributeError:
             query = table.select().where(
-                table.centerRA.between(ra - radius, ra + radius),
-                table.centerDEC.between(dec - radius, dec + radius)
+                table.centerRa.between(ra - radius, ra + radius),
+                table.centerDec.between(dec - radius, dec + radius)
             )
 
         print(query.sql())
