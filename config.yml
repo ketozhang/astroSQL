@@ -1,0 +1,10 @@
+forward: '~/astroSQL/ignore/config.yml'
+
+mysql:
+  host: 'localhost'
+  user: 'username'
+  password: ''
+  database: 'database_name'
+  images_table: 'images'
+
+store: "/path/to/store"

@@ -1,7 +1,6 @@
 import sys
-import os
-os.chdir("..")
-sys.path.append('src')
+from pathlib import Path
+sys.path.append(str(Path(__file__).absolute().parents[1]/'src'))
 import peeweedb
 from sqlconnector import connect
 from astrosql import AstroSQL

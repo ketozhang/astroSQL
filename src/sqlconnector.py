@@ -1,18 +1,17 @@
 import getpass
-from config import config
+from config import get_config
 from peewee import *
-
-config = config()
-HOST = config['mysql'].get('host', 'localhost')
-DATABASE = config['mysql'].get('database')
-USER = config['mysql'].get('user')
-PASSWORD = config['mysql'].get('password')
 
 # MySQL #
 
-
 def connect(database=None, user=None, password=None, host=None):
     """Returns an instance of MySQL database (peewee.MySQLDatabase)."""
+    config = get_config()
+    HOST = config['mysql'].get('host', 'localhost')
+    DATABASE = config['mysql'].get('database')
+    USER = config['mysql'].get('user')
+    PASSWORD = config['mysql'].get('password')
+
     database = DATABASE if not database else database
     user = USER if not user else user
     password = PASSWORD if not password else password

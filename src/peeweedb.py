@@ -1,7 +1,7 @@
-from config import config
+from config import get_config
 from peewee import *
 
-config = config()
+config = get_config()
 HOST = config['mysql'].get('host', 'localhost')
 DATABASE = config['mysql'].get('database')
 USER = config['mysql'].get('user')
