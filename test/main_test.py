@@ -1,8 +1,8 @@
 import sys
-from termcolor import colored
 from pathlib import Path
 sys.path.append(str(Path(__file__).absolute().parents[1]/'src'))
-import peeweedb
+
+from termcolor import colored
 from sqlconnector import connect
 from astrosql import AstroSQL
 
