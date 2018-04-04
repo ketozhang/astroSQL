@@ -17,7 +17,7 @@ src_path = root_path/"src"
 sys.path.append(str(root_path))
 sys.path.append(str(src_path))
 
-from src import argparser
+from astrosql import argparser
 
 
 def main(args):

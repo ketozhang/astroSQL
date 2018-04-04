@@ -1,10 +1,9 @@
 import sys
 from pathlib import Path
-sys.path.append(str(Path(__file__).absolute().parents[1]/'src'))
-
 from termcolor import colored
-from sqlconnector import connect
-from astrosql import AstroSQL
+from astrosql.sqlconnector import connect
+from astrosql.astrosql import AstroSQL
+# sys.path.append(str(Path(__file__).absolute().parents[1]))
 
 # Initialize database
 connection = connect() # is this redundant?
@@ -39,13 +38,13 @@ data = {'basename': 'UGC12893_20170808_094735_Aug78kld1_kait_clear', 'objname': 
 
 basename = "UGC12893_20170808_094735_Aug78kld1_kait_clear"
 data_lst = imagedb.get_by_basename(imagedb.get_table('images'), basename)
-print(data_lst)
+# print(data_lst)
 print(colored('\nSUCCESS\n', 'green')) if data_lst[0] == data else print(colored('FAILED', '\nred\n'))
 
 # Read from database by object name
 objname = 'UGC12893'
 data_lst = imagedb.get_by_object(imagedb.get_table('images'), objname)
-print(data_lst)
+# print(data_lst)
 print(colored('\nSUCCESS\n', 'green')) if data_lst[0] == data else print(colored('FAILED', '\nred\n'))
 
 # Read from database by ra, dec, and radius
@@ -53,7 +52,7 @@ ra = 0.059910
 dec = 17.225563953240275
 radius = 1 #arcsecond
 data_lst = imagedb.get_by_radec(imagedb.get_table('images'), ra, dec, radius)
-print(data_lst)
+# print(data_lst)
 print(colored('\nSUCCESS\n', 'green')) if data_lst[0] == data else print(colored('FAILED', '\nred\n'))
 
 # Read from apass by ra, dec, and radius
@@ -61,6 +60,6 @@ ra = 0.059910
 dec = 17.225563953240275 
 radius = 10 #arcsecond
 data_lst = imagedb.get_by_radec(apass, ra, dec, radius)
-print(data_lst)
+# print(data_lst)
 print(colored('\nSUCCESS\n', 'green'))
 

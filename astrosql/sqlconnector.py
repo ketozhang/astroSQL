@@ -1,8 +1,7 @@
 import getpass
-from config import get_config
+from astrosql.config import get_config
 from peewee import *
 
-# MySQL #
 
 def connect(database=None, user=None, password=None, host=None):
     """Returns an instance of MySQL database (peewee.MySQLDatabase)."""

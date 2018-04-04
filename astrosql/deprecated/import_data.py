@@ -6,7 +6,7 @@ Example:
 import argparse
 import getpass
 import pandas as pd
-from src.sqlconnector import connect
+from astrosql.sqlconnector import connect
 
 # Alias #
 

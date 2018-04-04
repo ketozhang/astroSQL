@@ -2,8 +2,8 @@
 import argparse
 import os
 import yaml
-from src import apass, astrosql, writer
-from src.procedure import update, calibration
+from astrosql import apass, astrosql, writer
+from astrosql.procedure import update, calibration
 
 dir = os.path.dirname(__file__)
 config_file = os.path.join(dir, '../config.yml')

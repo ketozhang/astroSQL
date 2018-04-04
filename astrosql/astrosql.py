@@ -1,5 +1,4 @@
 import peewee
-import peeweedb
 import pandas as pd
 import astropy.units as u
 from pathlib import Path
@@ -13,8 +12,8 @@ class AstroSQL:
 
         Parameters
         ----------
-        db  : peewee.MySQLDatabase
-            Peewee database
+        db : peewee.MySQLDatabase
+             A MySQL peewee database see [documentation](http://docs.peewee-orm.com/en/latest/peewee/database.html#using-mysql)
         """
         if isinstance(db, peewee.MySQLDatabase):
             self.db = db
@@ -26,14 +25,24 @@ class AstroSQL:
         self.tables = Introspector.from_database(db).generate_models(literal_column_names=True)
 
     def get_table(self, table):
+        """
+
+        Parameters
+        ----------
+        table : str, peewee.BaseModel, peewee.Model
+                Table queried in the database
+
+        Returns
+        -------
+        list
+            A list of rows as dict
+
+        """
         if issubclass(type(table), peewee.BaseModel) or issubclass(type(table), peewee.Model):
             table = table
         elif isinstance(table, str):
             assert table in self.tables, "Sanity Check Failed: Table queried does not exist"
-            try:
-                table = peeweedb.tables[table]
-            except KeyError:
-                table = self.tables[table]
+            table = self.tables[table]
         else:
             raise ValueError("argument [table] is neither a string or peewee.Model or peewee.BaseModel")
         return table
@@ -42,13 +51,13 @@ class AstroSQL:
         """
         Write a (1, n) dictionary (single row dictionary) to mySQL.
 
-        Parameters:
+        Parameters
         ----------
-        db  : A peewee.Database
-        table : str or peewee.Model
-            SQL table name or peewee.Model object to be created or appended
+        table : str, peewee.BaseModel, peewee.Model
+                Table to be written to
         data : dict
-            Data to be inserted. Values cannot be array-like
+                Data to be written, must match the columns of `table`
+
         """
         assert isinstance(data, dict), "argument [data] is not a Python dictionary"
         table = self.get_table(table)
@@ -56,6 +65,13 @@ class AstroSQL:
         table.create(**data)
 
     def text2sql(self, table, file):
+        """
+
+        Parameters
+        ----------
+        table : str
+        file : file, str, or pathlib.Path
+        """
         # TODO: Fix column header which is not yet parseable
 
         if isinstance(file, str):
@@ -74,7 +90,22 @@ class AstroSQL:
         table.insert_many(data)
 
     def get_by_basename(self, table, basename):
-        """Get data from SQL database by basename. Returns a list of dict"""
+        """
+        Get data from SQL database by the unique key basename.
+
+        Parameters
+        ----------
+        table : str, peewee.BaseModel, peewee.Model
+                Table queried in the database
+        basename : str
+                The base name queried from the unique key `basename` of the database
+
+        Returns
+        -------
+        list
+            A list of rows as dict
+
+        """
         table = self.get_table(table)
 
         query = table.select().where(table.basename == basename)
@@ -84,6 +115,22 @@ class AstroSQL:
         return data
 
     def get_by_object(self, table, objname):
+        """
+        Get data from SQL database by the column `objname`
+
+        Parameters
+        ----------
+        table : str, peewee.BaseModel, peewee.Model
+                Table queried in the database
+        objname : str
+                Object name queried from the `objname` column of the database
+
+        Returns
+        -------
+        list
+            A list of rows as dict
+
+        """
         table = self.get_table(table)
 
         query = table.select().where(table.objname == objname)
@@ -95,7 +142,23 @@ class AstroSQL:
     def get_by_radec(self, table, ra, dec, radius):
         """
         Get data from SQL database within a square area of the sky determined by ra, dec, radius.
-        Returns a list of dict
+
+        Parameters
+        ----------
+        table : str, peewee.BaseModel, peewee.Model
+             Table queried in the database
+        ra : float
+             The right ascension in degrees corresponding to the center of the queried box
+        dec : float
+             The declination in degrees corresponding to the center of the queried box
+        radius : float
+             The radius in arc minutes which is the square radius of the queried box.
+
+        Returns
+        -------
+        list
+            A list of rows as dict
+
         """
         table = self.get_table(table)
 
@@ -117,26 +180,3 @@ class AstroSQL:
         data = list(query.dicts())
         return data
 
-    def get_stars_by_radec(self, table, ra, dec, radius):
-        """
-        Get data from SQL database within a square area of the sky determined by ra, dec, radius.
-        Returns a list of dict
-        """
-        table = self.get_table(table)
-
-        radius = radius * u.arcmin.to(u.deg)
-
-        query = table.select().where(
-            table.RA.between(ra - radius, ra + radius),
-            table.DEC.between(dec - radius, dec + radius)
-        )
-        print(query.sql())
-
-        data = list(query.dicts())
-        return data
-
-def main(args):
-    raise NotImplementedError(
-        "'astrosql' command itself has not been implemented. "
-        "Use 'astrosql --help' for more commands"
-    )

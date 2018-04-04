@@ -1,5 +1,4 @@
 # -*- coding:utf-8 -*-
-
 from __future__ import unicode_literals
 # from builtins import str
 
@@ -7,7 +6,7 @@ import warnings
 import requests
 from astropy.table import Table
 from astropy.io import ascii
-from src.sqlconnector import connect
+from astrosql.sqlconnector import connect
 from io import StringIO
 
 

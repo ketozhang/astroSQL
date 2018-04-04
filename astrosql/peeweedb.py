@@ -1,4 +1,4 @@
-from config import get_config
+from astrosql.config import get_config
 from peewee import *
 
 config = get_config()
@@ -97,7 +97,6 @@ class Test(MySQLModel):
         database = db
         primary_key = CompositeKey('centerRa', 'centerDec')
         db_table = 'test'
-
 
 tables = {
     Images._meta.db_table: Images,

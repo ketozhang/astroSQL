@@ -1,4 +1,4 @@
-forward: '~/astroSQL/ignore/config.yml'
+forward: './ignore/config.yml'
 
 mysql:
   host: 'localhost'
