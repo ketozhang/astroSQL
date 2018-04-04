@@ -1,6 +1,7 @@
 # Dir
 /.vscode
 /__pycache__
+/astrosql/ignore
 /data
 /ignore
 /zaphot

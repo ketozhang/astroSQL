@@ -12,6 +12,15 @@ Simple API to access to existing astronomical MySQL database
 * MySQL server
 * [Anaconda Distribution](https://www.anaconda.com/download/) (*necessary if conda environment are used*)
 
+## Setup
+
+
+```sh
+$ git clone https://github.com/ketozhang/astroSQL
+$ cd astroSQL
+$ pip install .
+```
+
 ## References
 **Filippenko Group - Project Team**
 The program was built for the Filippenko Group, astronomy researchers led by [Alex Filippenko](https://astro.berkeley.edu/faculty-profile/alex-filippenko) for analyzing data from the Lick Observatory and Keck Observatory.
