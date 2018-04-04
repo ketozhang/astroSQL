@@ -34,11 +34,10 @@ Simple API to access to existing astronomical MySQL database
     # Uncomment 'forward' if you want to place config.yml elsewhere, specify the file path.
     # forward: '/path/to/config.yml'
 
-    # Comment out any unecessary lines, empty will be ready
+    # If user or password are empty, they will be prompted later
     mysql:
         host: 'localhost'
         user: 'username'
-        # if commented out password will be prompted on every connection to database
         password: ''
         database: 'database_name'
     ```

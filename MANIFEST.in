@@ -1,1 +1,1 @@
-recursive-include astrosql/*
+include astrosql/*.yml
