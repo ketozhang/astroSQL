@@ -31,10 +31,10 @@ Simple API to access to existing astronomical MySQL database
     In `config.yml` edit as necessary
 
     ```yml
-    # Uncomment 'forward' if you want to place config.yml elsewhere, specify the file path.
+    # Uncomment 'forward' if you want to place config.yml elsewhere, specify the file path (maybe `~/.astrosql/config.yml` ?)
     # forward: '/path/to/config.yml'
 
-    # Comment out any unecessary lines, empty will be ready
+    # Comment out any unecessary lines, empty will be read
     mysql:
         host: 'localhost'
         user: 'username'
