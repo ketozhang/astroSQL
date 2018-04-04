@@ -14,12 +14,38 @@ Simple API to access to existing astronomical MySQL database
 
 ## Setup
 
+1. Clone the project and pip install
 
-```sh
-$ git clone https://github.com/ketozhang/astroSQL
-$ cd astroSQL
-$ pip install .
-```
+    ```sh
+    $ git clone https://github.com/ketozhang/astroSQL
+    $ cd astroSQL
+    $ pip install .
+    ```
+
+2. Edit the configuration file `config.yml` which is located in where pip installed this package `/path/to/site-package/`. You may also use short python method to do this:
+
+    ```bash
+    $ ls $(python -c "import site; print(site.getsitepackages()[0])")/astrosql
+    ```
+
+    In `config.yml` edit as necessary
+
+    ```yml
+    # Uncomment 'forward' if you want to place config.yml elsewhere, specify the file path.
+    # forward: '/path/to/config.yml'
+
+    # Comment out any unecessary lines, empty will be ready
+    mysql:
+        host: 'localhost'
+        user: 'username'
+        # if commented out password will be prompted on every connection to database
+        password: ''
+        database: 'database_name'
+    ```
+
+    > <span style="color:rgb(200,0,0)">WARNING:</span> Keep this file secure if password is written
+
+## Usage
 
 ## References
 **Filippenko Group - Project Team**
