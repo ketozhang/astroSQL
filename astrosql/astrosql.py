@@ -1,6 +1,7 @@
+import astropy.units as u
+import numpy as np
 import peewee
 import pandas as pd
-import astropy.units as u
 from pathlib import Path
 from pwiz import Introspector
 
@@ -29,7 +30,7 @@ class AstroSQL:
 
         Parameters
         ----------
-        table : str, peewee.BaseModel, peewee.Model
+        table : str, peewee.Model
                 Table queried in the database
 
         Returns
@@ -38,13 +39,13 @@ class AstroSQL:
             A list of rows as dict
 
         """
-        if issubclass(type(table), peewee.BaseModel) or issubclass(type(table), peewee.Model):
+        if issubclass(type(table), peewee.Model):
             table = table
         elif isinstance(table, str):
             assert table in self.tables, "Sanity Check Failed: Table queried does not exist"
             table = self.tables[table]
         else:
-            raise ValueError("argument [table] is neither a string or peewee.Model or peewee.BaseModel")
+            raise ValueError("argument [table] is neither a string or peewee.Model")
         return table
 
     def dict2sql(self, table, data):
@@ -53,7 +54,7 @@ class AstroSQL:
 
         Parameters
         ----------
-        table : str, peewee.BaseModel, peewee.Model
+        table : str, peewee.Model
                 Table to be written to
         data : dict
                 Data to be written, must match the columns of `table`
@@ -95,7 +96,7 @@ class AstroSQL:
 
         Parameters
         ----------
-        table : str, peewee.BaseModel, peewee.Model
+        table : str, peewee.Model
                 Table queried in the database
         basename : str
                 The base name queried from the unique key `basename` of the database
@@ -120,7 +121,7 @@ class AstroSQL:
 
         Parameters
         ----------
-        table : str, peewee.BaseModel, peewee.Model
+        table : str, peewee.Model
                 Table queried in the database
         objname : str
                 Object name queried from the `objname` column of the database
@@ -145,7 +146,7 @@ class AstroSQL:
 
         Parameters
         ----------
-        table : str, peewee.BaseModel, peewee.Model
+        table : str, peewee.Model
              Table queried in the database
         ra : float
              The right ascension in degrees corresponding to the center of the queried box
@@ -171,7 +172,7 @@ class AstroSQL:
             )
         except AttributeError:
             query = table.select().where(
-                table.centerRa.between(ra - radius, ra + radius),
+                table.centerRa.between((ra - radius)/np.cos(dec), (ra + radius)/np.cos(dec)),
                 table.centerDec.between(dec - radius, dec + radius)
             )
 

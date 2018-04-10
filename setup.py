@@ -10,6 +10,6 @@ setup(name='astrosql',
       # data_files=[
       #       ('/path/to/write', ['path/to/data/file'])
       # ],
-      install_requires=['peewee', 'termcolor', 'pymysql'],
+      install_requires=['peewee', 'termcolor', 'pymysql', 'astropy', 'numpy', 'pandas'],
       include_package_data=True,
       zip_safe=False)
