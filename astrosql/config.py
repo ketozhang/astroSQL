@@ -3,7 +3,6 @@ from pathlib import Path
 
 
 def load(filepath):
-    print(filepath)
     filepath = Path(str.replace(str(filepath), '~', str(Path.home())))
     if filepath.is_file():
         with filepath.open() as ymlfile:

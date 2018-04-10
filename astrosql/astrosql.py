@@ -30,7 +30,7 @@ class AstroSQL:
 
         Parameters
         ----------
-        table : str, peewee.Model
+        table : str, peewee.ModelBase
                 Table queried in the database
 
         Returns
@@ -39,13 +39,13 @@ class AstroSQL:
             A list of rows as dict
 
         """
-        if issubclass(type(table), peewee.Model):
-            table = table
-        elif isinstance(table, str):
+        if isinstance(table, str):
             assert table in self.tables, "Sanity Check Failed: Table queried does not exist"
             table = self.tables[table]
+        elif isinstance(table, peewee.ModelBase):
+            table = table
         else:
-            raise ValueError("argument [table] is neither a string or peewee.Model")
+            raise ValueError("argument [table] is neither a string or peewee.ModelBase")
         return table
 
     def dict2sql(self, table, data):
@@ -54,7 +54,7 @@ class AstroSQL:
 
         Parameters
         ----------
-        table : str, peewee.Model
+        table : str, peewee.ModelBase
                 Table to be written to
         data : dict
                 Data to be written, must match the columns of `table`
@@ -74,6 +74,8 @@ class AstroSQL:
         file : file, str, or pathlib.Path
         """
         # TODO: Fix column header which is not yet parseable
+
+        raise DeprecationWarning
 
         if isinstance(file, str):
             assert Path(str).exists(), "{} is not a valid file path or does not exit".format(file)
@@ -96,7 +98,7 @@ class AstroSQL:
 
         Parameters
         ----------
-        table : str, peewee.Model
+        table : str, peewee.ModelBase
                 Table queried in the database
         basename : str
                 The base name queried from the unique key `basename` of the database
@@ -121,7 +123,7 @@ class AstroSQL:
 
         Parameters
         ----------
-        table : str, peewee.Model
+        table : str, peewee.ModelBase
                 Table queried in the database
         objname : str
                 Object name queried from the `objname` column of the database
@@ -146,7 +148,7 @@ class AstroSQL:
 
         Parameters
         ----------
-        table : str, peewee.Model
+        table : str, peewee.ModelBase
              Table queried in the database
         ra : float
              The right ascension in degrees corresponding to the center of the queried box
