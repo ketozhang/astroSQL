@@ -1,12 +1,19 @@
 # astroSQL - Database Tools for Astronomers
 _Currently in development usable only by Filipenko Group._
 
-Simple API to access to existing astronomical MySQL database
+Simple Python API and shell commands to access to existing astronomical MySQL database.
 
 ## Features
-* **astroSQL** Basics:
-* Read SQL database (`get_by_basename`, `get_by_radec`)
-* Update SQL database (`dict2sql`, `text2sql`)
+* **astroSQL** Python API:
+  - [x] read SQL database (`get_by_basename`, `get_by_radec`)
+  - [x] update SQL database (`dict2sql`, `text2sql`)
+  - [x] SQL query using peewee ORM
+* **astroSQL** Shell Command
+  - [ ]  query SQL database to text-based file
+  - [ ]  update SQL database with text-based file
+  
+> - [ ] to be available 
+> - [x] available
 
 ## Dependencies
 * MySQL server
@@ -45,6 +52,11 @@ Simple API to access to existing astronomical MySQL database
     > <span style="color:rgb(200,0,0)">WARNING:</span> Keep this file secure if password is written
 
 ## Usage
+
+See [wiki](https://github.com/ketozhang/astroSQL/wiki):
+
+* [Python Usage](https://github.com/ketozhang/astroSQL/wiki/Python-Usage)
+* [Shell Usage](https://github.com/ketozhang/astroSQL/wiki/Shell-Usage)
 
 ## References
 **Filippenko Group - Project Team**
