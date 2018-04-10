@@ -1,7 +1,7 @@
 from setuptools import setup, find_packages
 
 setup(name='astrosql',
-      version='0.1.0',
+      version='0.1.1',
       description='Simple API to access to existing astronomical MySQL database',
       url='https://github.com/ketozhang/astroSQL',
       author='Keto Zhang, Weikang Zheng',
