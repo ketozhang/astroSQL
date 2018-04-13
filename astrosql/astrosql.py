@@ -2,6 +2,8 @@ import astropy.units as u
 import numpy as np
 import peewee
 import pandas as pd
+import re
+import warnings
 from pathlib import Path
 from pwiz import Introspector
 
@@ -14,7 +16,8 @@ class AstroSQL:
         Parameters
         ----------
         db : peewee.MySQLDatabase
-             A MySQL peewee database see [documentation](http://docs.peewee-orm.com/en/latest/peewee/database.html#using-mysql)
+             A MySQL peewee database see
+             [documentation](http://docs.peewee-orm.com/en/latest/peewee/database.html#using-mysql)
         """
         if isinstance(db, peewee.MySQLDatabase):
             self.db = db
@@ -24,6 +27,8 @@ class AstroSQL:
             raise ValueError('argument [db] is neither a peewee.MySQLDatabase, nor a string')
 
         self.tables = Introspector.from_database(db).generate_models(literal_column_names=True)
+        if len(self.tables) == 0:
+            warnings.warn("You're working with an empty database.", FutureWarning)
 
     def get_table(self, table):
         """
@@ -35,7 +40,7 @@ class AstroSQL:
 
         Returns
         -------
-        list
+        peewee.Model
             A list of rows as dict
 
         """
@@ -174,7 +179,7 @@ class AstroSQL:
             )
         except AttributeError:
             query = table.select().where(
-                table.centerRa.between((ra - radius)/np.cos(dec), (ra + radius)/np.cos(dec)),
+                table.centerRa.between(ra - radius/np.cos(dec), ra + radius/np.cos(dec)),
                 table.centerDec.between(dec - radius, dec + radius)
             )
 
@@ -182,4 +187,30 @@ class AstroSQL:
 
         data = list(query.dicts())
         return data
+
+    def get_by_sql(self, query):
+        """
+        Get data from SQL by an SQL select query.
+
+        Parameters
+        ----------
+        query : str
+                An SQL select `query`. `query` must end with a semicolon ';'
+
+        Returns
+        -------
+        list
+            A list of rows as dict
+        """
+        pattern = r"^SELECT .*;$"
+        assert len(self.tables) > 0, 'This database has no tables, there is nothing to select.'
+        assert re.match(pattern, query), "Query is invalid. It must be in the form of a typical SQL select statement " \
+                                         "like 'SELECT <expr> FROM <table> [...] ;"
+
+        model = list(self.tables.values())[0]
+        print(query)
+
+        data = list(model.raw(query).dicts())
+        return data
+
 
