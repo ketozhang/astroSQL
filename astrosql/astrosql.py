@@ -170,7 +170,7 @@ class AstroSQL:
         """
         table = self.get_table(table)
 
-        radius = radius * u.arcmin.to(u.deg)
+        radius = radius * u.arcmin.to(u.deg) / np.cos((dec*u.deg).to(u.rad).value)
 
         try:
             query = table.select().where(
@@ -179,7 +179,7 @@ class AstroSQL:
             )
         except AttributeError:
             query = table.select().where(
-                table.centerRa.between(ra - radius/np.cos(dec), ra + radius/np.cos(dec)),
+                table.centerRa.between(ra - radius, ra + radius),
                 table.centerDec.between(dec - radius, dec + radius)
             )
 
