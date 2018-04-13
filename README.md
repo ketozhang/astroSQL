@@ -43,6 +43,17 @@ Simple Python API and shell commands to access to existing astronomical MySQL da
 
     > <span style="color:rgb(200,0,0)">WARNING:</span> Keep this file secure if password is written
 
+3. Test setup
+
+    ```python
+    >>> from astrosql.sqlconnector import connect
+    >>> from astrosql import AstroSQL
+
+    >>> db = AstroSQL(connect()) # connect does not need args as it reads from config.yml
+    >>> db.tables.values()
+    dict_values(['tb1, tb2, ...']) # should output all table names from your database
+    ```
+
 ## Usage
 
 See [wiki](https://github.com/ketozhang/astroSQL/wiki):
