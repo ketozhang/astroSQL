@@ -202,7 +202,7 @@ class AstroSQL:
         list
             A list of rows as dict
         """
-        pattern = r"^SELECT .*;$"
+        pattern = r"^SELECT [^;]*;$"
         assert len(self.tables) > 0, 'This database has no tables, there is nothing to select.'
         assert re.match(pattern, query), "Query is invalid. It must be in the form of a typical SQL select statement " \
                                          "like 'SELECT <expr> FROM <table> [...] ;"

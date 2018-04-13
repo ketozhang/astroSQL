@@ -1,11 +1,11 @@
 from setuptools import setup, find_packages
 
 setup(name='astrosql',
-      version='0.1.2',
+      version='0.1.1',
       description='Simple API to access to existing astronomical MySQL database',
       url='https://github.com/ketozhang/astroSQL',
       author='Keto Zhang, Weikang Zheng',
-      author_email='keto.zhang@gmail.com, NA',
+      author_email='keto.zhang@gmail.com',
       packages=['astrosql'],
       # data_files=[
       #       ('/path/to/write', ['path/to/data/file'])
