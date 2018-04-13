@@ -6,7 +6,7 @@ setup(name='astrosql',
       url='https://github.com/ketozhang/astroSQL',
       author='Keto Zhang, Weikang Zheng',
       author_email='keto.zhang@gmail.com, NA',
-      packages=find_packages(),
+      packages=['astrosql'],
       # data_files=[
       #       ('/path/to/write', ['path/to/data/file'])
       # ],
