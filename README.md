@@ -1,7 +1,7 @@
 # astroSQL - Database Tools for Astronomers
 _Currently in development usable only by Filipenko Group._
 
-Simple Python API and shell commands to access to existing astronomical MySQL database.
+Simple Python API and shell commands to access existing astronomical MySQL database.
 
 ## Features
 * **astroSQL** Python API:
@@ -18,12 +18,16 @@ Simple Python API and shell commands to access to existing astronomical MySQL da
 
 ## Setup
 
-1. Clone the project and pip install
+1. Perform a `pip install`,
 
     ```sh
-    $ git clone https://github.com/ketozhang/astroSQL
-    $ cd astroSQL
-    $ pip install .
+    $ pip install astroSQL
+    ```
+    
+    Check the version installed:
+    
+    ```sh
+    $ pip show astroSQL
     ```
 
 2. Edit the configuration file as necessary in `~/.astrosql/config.yml`:
