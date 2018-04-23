@@ -1,12 +1,12 @@
 import sys
 from pathlib import Path
 from termcolor import colored
+sys.path.append(str(Path(__file__).absolute().parents[1]))
 from astrosql.sqlconnector import connect
 from astrosql.astrosql import AstroSQL
-# sys.path.append(str(Path(__file__).absolute().parents[1]))
 
 # Initialize database
-connection = connect() # is this redundant?
+connection = connect(user='keto', database='photometry_cal') # is this redundant?
 imagedb = AstroSQL(connection) # photometry_cal_db
 
 images = imagedb.get_table('images')

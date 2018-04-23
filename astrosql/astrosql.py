@@ -97,6 +97,54 @@ class AstroSQL:
         data = df.to_dict('records')
         table.insert_many(data)
 
+    def get(self, table, **kwargs):
+        table = self.get_table(table)
+        query = table.select()
+
+        if len(kwargs) == 0:
+            return None
+
+        if any([arg in kwargs for arg in ['RA', 'DEC', 'radius']]):
+            if all([arg in kwargs for arg in ['RA', 'DEC', 'radius']]):
+                ra = kwargs['RA']
+                dec = kwargs['DEC']
+                radius = kwargs['radius']
+                try:
+                    query = query.where(
+                        table.RA.between(ra - radius, ra + radius),
+                        table.DEC.between(dec - radius, dec + radius)
+                    )
+                except AttributeError:
+                    query = query.where(
+                        table.centerRa.between(ra - radius, ra + radius),
+                        table.centerDec.between(dec - radius, dec + radius)
+                    )
+            elif all([arg in kwargs for arg in ['RA', 'DEC']]):
+                ra = kwargs['RA']
+                dec = kwargs['DEC']
+                try:
+                    query = query.where(
+                        table.RA == ra,
+                        table.Dec == dec
+                                        )
+                except AttributeError:
+                    query = query.where(
+                        table.centerRa == ra,
+                        table.centerDec == dec
+                    )
+            else:
+                raise ValueError("Coordinate arguments must be in triples (RA, DEC, radius) or tuples (RA, DEC)")
+                # TODO: Consider search by RA and DEC (rare case)
+
+        for key, value in [tup for tup in kwargs.items() if tup[0] not in ['RA', 'DEC', 'radius']]:
+            print(key,value)
+            query = query.where(getattr(table, key) == value)
+
+        print(query)
+
+        data = list(query.dicts())
+        return data
+
     def get_by_basename(self, table, basename):
         """
         Get data from SQL database by the unique key basename.
@@ -202,7 +250,7 @@ class AstroSQL:
         list
             A list of rows as dict
         """
-        pattern = r"^SELECT .*;$"
+        pattern = r"^SELECT [^;]*;$"
         assert len(self.tables) > 0, 'This database has no tables, there is nothing to select.'
         assert re.match(pattern, query), "Query is invalid. It must be in the form of a typical SQL select statement " \
                                          "like 'SELECT <expr> FROM <table> [...] ;"
