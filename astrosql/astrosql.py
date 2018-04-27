@@ -6,27 +6,29 @@ import re
 import warnings
 from pathlib import Path
 from pwiz import Introspector
+from astrosql.sqlconnector import connect
+from pymysql import InternalError
 
 
 class AstroSQL:
 
-    def __init__(self, db):
+    def __init__(self, database, **kwargs):
         """
 
         Parameters
         ----------
-        db : peewee.MySQLDatabase
+        database : peewee.MySQLDatabase
              A MySQL peewee database see
              [documentation](http://docs.peewee-orm.com/en/latest/peewee/database.html#using-mysql)
         """
-        if isinstance(db, peewee.MySQLDatabase):
-            self.db = db
-        elif isinstance(str, db):
-            raise NotImplementedError
+        if isinstance(database, peewee.MySQLDatabase):
+            self.database = database
+        elif isinstance(database, str):
+            self.database = connect(database=database, **kwargs)
         else:
-            raise ValueError('argument [db] is neither a peewee.MySQLDatabase, nor a string')
+            raise ValueError('argument [database] is neither a peewee.MySQLDatabase, nor a string')
 
-        self.tables = Introspector.from_database(db).generate_models(literal_column_names=True)
+        self.tables = Introspector.from_database(self.database).generate_models(literal_column_names=True)
         if len(self.tables) == 0:
             warnings.warn("You're working with an empty database.", FutureWarning)
 
@@ -98,46 +100,45 @@ class AstroSQL:
         table.insert_many(data)
 
     def get(self, table, **kwargs):
+        kwargs = {k: v for k, v in kwargs.items()}
         table = self.get_table(table)
         query = table.select()
 
         if len(kwargs) == 0:
             return None
 
-        if any([arg in kwargs for arg in ['RA', 'DEC', 'radius']]):
-            if all([arg in kwargs for arg in ['RA', 'DEC', 'radius']]):
-                ra = kwargs['RA']
-                dec = kwargs['DEC']
+        if any([arg in kwargs for arg in ['ra', 'dec', 'radius']]):
+            if all([arg in kwargs for arg in ['ra', 'dec', 'radius']]):
+                ra = kwargs['ra']
+                dec = kwargs['dec']
                 radius = kwargs['radius']
                 try:
                     query = query.where(
                         table.RA.between(ra - radius, ra + radius),
-                        table.DEC.between(dec - radius, dec + radius)
+                        table.Dec.between(dec - radius, dec + radius)
                     )
                 except AttributeError:
                     query = query.where(
                         table.centerRa.between(ra - radius, ra + radius),
                         table.centerDec.between(dec - radius, dec + radius)
                     )
-            elif all([arg in kwargs for arg in ['RA', 'DEC']]):
-                ra = kwargs['RA']
-                dec = kwargs['DEC']
+            elif all([arg in kwargs for arg in ['ra', 'dec']]):
+                ra = kwargs['ra']
+                dec = kwargs['dec']
                 try:
                     query = query.where(
                         table.RA == ra,
-                        table.Dec == dec
-                                        )
+                        table.Dec == dec)
+
                 except AttributeError:
                     query = query.where(
                         table.centerRa == ra,
                         table.centerDec == dec
                     )
             else:
-                raise ValueError("Coordinate arguments must be in triples (RA, DEC, radius) or tuples (RA, DEC)")
-                # TODO: Consider search by RA and DEC (rare case)
+                raise ValueError("Coordinate arguments must be in triples (RA, Dec, radius) or tuples (RA, Dec)")
 
-        for key, value in [tup for tup in kwargs.items() if tup[0] not in ['RA', 'DEC', 'radius']]:
-            print(key,value)
+        for key, value in [tup for tup in kwargs.items() if tup[0] not in ['ra', 'dec', 'radius']]:
             query = query.where(getattr(table, key) == value)
 
         print(query)
@@ -218,7 +219,7 @@ class AstroSQL:
         """
         table = self.get_table(table)
 
-        radius = radius * u.arcmin.to(u.deg) / np.cos((dec*u.deg).to(u.rad).value)
+        radius = radius * u.arcmin.to(u.deg) / np.cos((dec * u.deg).to(u.rad).value)
 
         try:
             query = table.select().where(
@@ -260,5 +261,3 @@ class AstroSQL:
 
         data = list(model.raw(query).dicts())
         return data
-
-

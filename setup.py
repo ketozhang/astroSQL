@@ -2,7 +2,7 @@ from setuptools import setup, find_packages
 from pathlib import Path
 
 setup(name='astrosql',
-      version='0.2.1',
+      version='0.2.2',
       description='Simple API to access to existing astronomical MySQL database',
       url='https://github.com/ketozhang/astroSQL',
       author='Keto Zhang, Weikang Zheng',
