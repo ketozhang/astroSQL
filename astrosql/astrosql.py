@@ -55,6 +55,24 @@ class AstroSQL:
             raise ValueError("argument [table] is neither a string or peewee.ModelBase")
         return table
 
+    def array2sql(self, table, data):
+        """
+        Write a (m, n) array-like (m row dictionary) to mySQL.
+
+        Parameters
+        ----------
+        table : str, peewee.ModelBase
+                Table to be written to
+        data : dict
+                Data to be written, ordered by SQL schema order (use `DESC table` in SQL)
+
+        """
+        assert isinstance(data, list) or isinstance(data, np.array), "argument [data] is not a list or numpy array"
+        table = self.get_table(table)
+        fields = table._meta_.sorted_fields
+        query = table.insert_many(data, fields=fields)
+        query.execute()
+
     def dict2sql(self, table, data):
         """
         Write a (1, n) dictionary (single row dictionary) to mySQL.
@@ -64,13 +82,13 @@ class AstroSQL:
         table : str, peewee.ModelBase
                 Table to be written to
         data : dict
-                Data to be written, must match the columns of `table`
+                Data to be written, keys must match the columns of `table`
 
         """
         assert isinstance(data, dict), "argument [data] is not a Python dictionary"
         table = self.get_table(table)
-
-        table.create(**data)
+        query = table.insert(data)
+        query.execute()
 
     def text2sql(self, table, file):
         """

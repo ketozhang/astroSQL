@@ -23,9 +23,9 @@ Simple Python API and shell commands to access existing astronomical MySQL datab
     ```sh
     $ pip install astroSQL
     ```
-    
+
     Check the version installed:
-    
+
     ```sh
     $ pip show astroSQL
     ```
@@ -63,7 +63,6 @@ Simple Python API and shell commands to access existing astronomical MySQL datab
 See [wiki](https://github.com/ketozhang/astroSQL/wiki):
 
 * [Python Usage](https://github.com/ketozhang/astroSQL/wiki/Python-Usage)
-* [Shell Usage](https://github.com/ketozhang/astroSQL/wiki/Shell-Usage)
 
 ## References
 **Filippenko Group - Project Team**
