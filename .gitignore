@@ -12,5 +12,6 @@
 *.save
 *.swp
 *.wiki
+*.pytest_cache/
 
 # Specific Files
