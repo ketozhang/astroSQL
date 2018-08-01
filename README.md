@@ -1,3 +1,5 @@
+[![Build Status](https://travis-ci.org/ketozhang/astroSQL.svg?branch=master)](https://travis-ci.org/ketozhang/astroSQL)
+
 # astroSQL - Simple Database Tools for Python
 
 Simple Python API to access existing astronomy MySQL database.
@@ -45,6 +47,7 @@ Simple Python API to access existing astronomy MySQL database.
         password: ''
         database: 'database_name'
     ```
+
 
     > <span style="color:rgb(200,0,0)">WARNING:</span> Keep this file secure if password is written
 
