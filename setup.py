@@ -2,9 +2,14 @@ import shutil
 from setuptools import setup, find_packages
 from pathlib import Path
 
+with open('README.md', 'r') as f:
+      README = f.read()
+
 setup(name='astrosql',
-      version='0.2.4',
+      version='0.3.0',
       description='Simple API to access to existing astronomical MySQL database',
+      long_description = README,
+      long_description_content_type = "text/markdown",
       url='https://github.com/ketozhang/astroSQL',
       author='Keto Zhang, Weikang Zheng',
       author_email='keto.zhang@gmail.com',
