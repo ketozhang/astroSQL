@@ -20,4 +20,4 @@ config_file = (Path(__file__).parent/'astrosql'/'config.yml').resolve()
 (Path.home()/'.astrosql').mkdir(exist_ok = True)
 if not (Path.home()/'.astrosql'/'config.yml').exists():
       new_file = Path.home()/'.astrosql'/'config.yml'
-      shutil.copyfile(config_file, str(new_file))
+      shutil.copyfile(str(config_file), str(new_file))
