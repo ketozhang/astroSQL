@@ -12,12 +12,6 @@ def load(filepath):
 
 
 def get_config():
-    config_file = Path.home()/'.astrosql'/'config.yml'
+    config_file = Path.home() / ".astrosql" / "config.yml"
     config = load(config_file)
-    if 'forward' in config:
-        config_file = Path(config['forward'])
-        # if config_file.is_absolute():
-        config = load(config_file)
-        # else:
-        #     config = load(Path(__file__).parent/config_file)
     return config
