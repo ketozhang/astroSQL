@@ -1,10 +1,7 @@
 # Dir
-/.vscode
-/__pycache__
-/astrosql/ignore
-/data
-/ignore
-/zaphot
+.vscode/
+.venv/
+__pycache__/
 
 # Formats
 *.pyc
@@ -15,3 +12,4 @@
 *.pytest_cache/
 
 # Specific Files
+poetry.lock
