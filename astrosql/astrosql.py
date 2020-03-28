@@ -29,16 +29,24 @@ class AstroSQL:
                 "argument [database] is neither a peewee.MySQLDatabase, nor a string"
             )
 
+        self._tables = self.tables
+
+    @property
+    def tables(self):
+        """Return a list of table objects (peewee.Model) introspected from the database on every get."""
         try:
-            self.tables = Introspector.from_database(self.database).generate_models(
+            self._tables = Introspector.from_database(self.database).generate_models(
                 literal_column_names=True
             )
         except peewee.OperationalError as e:
             raise peewee.OperationalError(
                 f'{e}\nCheck your keyword arguments connect(database=..., user=..., password=..., ...) or if none provided check cnf file specified by keyword `read_default_file` [default: "~/.my.cnf"]. '
             ) from e
-        if len(self.tables) == 0:
+
+        if len(self._tables) == 0:
             warnings.warn("You're working with an empty database.", FutureWarning)
+
+        return self._tables
 
     def get_table(self, table):
         """
@@ -120,7 +128,7 @@ class AstroSQL:
             ).exists(), "{} is not a valid file path or does not exit".format(file)
         table = self.get_table(table)
 
-        df = pd.read_csv(file, header=None, sep="\s+", comment="#")
+        df = pd.read_csv(file, header=None, sep="\s+", comment="#")``
 
         print(
             "\nFirst few rows of data (",
