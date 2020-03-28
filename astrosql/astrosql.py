@@ -1,13 +1,14 @@
-import astropy.units as u
-import numpy as np
-import peewee
-import pandas as pd
 import re
 import warnings
 from pathlib import Path
+
+import astropy.units as u
+import numpy as np
+import pandas as pd
+import peewee
 from pwiz import Introspector
+
 from .sqlconnector import connect
-from pymysql import InternalError
 
 
 class AstroSQL:

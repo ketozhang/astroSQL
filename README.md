@@ -5,10 +5,10 @@ Simple Python API to access existing or create astronomy MySQL database.
 ## Features
 
 - **astroSQL** Python API:
-  - [x] create SQL database table
-  - [x] read SQL database table
-  - [x] update SQL database table
-  - [x] SQL query using peewee ORM
+  - [x] Uses Peewee SQL ORM.
+  - [x] Workflow: connects to database -> get by table name -> query by various methods.
+  - [x] Smartly inspects database to gather table/schema removing the need to create database models.
+  - [x] Collection of simple SQL read and write methods.
 
 
 ## System Dependencies
