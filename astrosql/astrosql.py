@@ -11,7 +11,6 @@ from pymysql import InternalError
 
 
 class AstroSQL:
-
     def __init__(self, database, **kwargs):
         """
 
@@ -26,9 +25,18 @@ class AstroSQL:
         elif isinstance(database, str):
             self.database = connect(database=database, **kwargs)
         else:
-            raise ValueError('argument [database] is neither a peewee.MySQLDatabase, nor a string')
+            raise ValueError(
+                "argument [database] is neither a peewee.MySQLDatabase, nor a string"
+            )
 
-        self.tables = Introspector.from_database(self.database).generate_models(literal_column_names=True)
+        try:
+            self.tables = Introspector.from_database(self.database).generate_models(
+                literal_column_names=True
+            )
+        except peewee.OperationalError as e:
+            raise peewee.OperationalError(
+                f'{e}\nCheck your keyword arguments connect(database=..., user=..., password=..., ...) or if none provided check cnf file specified by keyword `read_default_file` [default: "~/.my.cnf"]. '
+            ) from e
         if len(self.tables) == 0:
             warnings.warn("You're working with an empty database.", FutureWarning)
 
@@ -47,7 +55,9 @@ class AstroSQL:
 
         """
         if isinstance(table, str):
-            assert table in self.tables, "Sanity Check Failed: Table queried does not exist"
+            assert (
+                table in self.tables
+            ), "Sanity Check Failed: Table queried does not exist"
             table = self.tables[table]
         elif isinstance(table, peewee.ModelBase):
             table = table
@@ -67,7 +77,9 @@ class AstroSQL:
                 Data to be written, ordered by SQL schema order (use `DESC table` in SQL)
 
         """
-        assert isinstance(data, list) or isinstance(data, np.array), "argument [data] is not a list or numpy array"
+        assert isinstance(data, list) or isinstance(
+            data, np.array
+        ), "argument [data] is not a list or numpy array"
         table = self.get_table(table)
         fields = table._meta_.sorted_fields
         query = table.insert_many(data, fields=fields)
@@ -103,18 +115,26 @@ class AstroSQL:
         raise DeprecationWarning
 
         if isinstance(file, str):
-            assert Path(str).exists(), "{} is not a valid file path or does not exit".format(file)
+            assert Path(
+                str
+            ).exists(), "{} is not a valid file path or does not exit".format(file)
         table = self.get_table(table)
 
-        df = pd.read_csv(file, header=None, sep="\s+", comment='#')
+        df = pd.read_csv(file, header=None, sep="\s+", comment="#")
 
-        print("\nFirst few rows of data (", args.file,
-              "):to be loaded: \n{}\n".format(df.head()))
-        print("\nLast few rows of data (", args.file,
-              "):to be loaded: \n{}\n".format(df.tail()))
+        print(
+            "\nFirst few rows of data (",
+            args.file,
+            "):to be loaded: \n{}\n".format(df.head()),
+        )
+        print(
+            "\nLast few rows of data (",
+            args.file,
+            "):to be loaded: \n{}\n".format(df.tail()),
+        )
         print("Writing to database.\nThis may take a while...")
 
-        data = df.to_dict('records')
+        data = df.to_dict("records")
         table.insert_many(data)
 
     def get(self, table, **kwargs):
@@ -125,38 +145,37 @@ class AstroSQL:
         if len(kwargs) == 0:
             return None
 
-        if any([arg in kwargs for arg in ['ra', 'dec', 'radius']]):
-            if all([arg in kwargs for arg in ['ra', 'dec', 'radius']]):
-                ra = kwargs['ra']
-                dec = kwargs['dec']
-                radius = kwargs['radius']
+        if any([arg in kwargs for arg in ["ra", "dec", "radius"]]):
+            if all([arg in kwargs for arg in ["ra", "dec", "radius"]]):
+                ra = kwargs["ra"]
+                dec = kwargs["dec"]
+                radius = kwargs["radius"]
                 try:
                     query = query.where(
                         table.RA.between(ra - radius, ra + radius),
-                        table.Dec.between(dec - radius, dec + radius)
+                        table.Dec.between(dec - radius, dec + radius),
                     )
                 except AttributeError:
                     query = query.where(
                         table.centerRa.between(ra - radius, ra + radius),
-                        table.centerDec.between(dec - radius, dec + radius)
+                        table.centerDec.between(dec - radius, dec + radius),
                     )
-            elif all([arg in kwargs for arg in ['ra', 'dec']]):
-                ra = kwargs['ra']
-                dec = kwargs['dec']
+            elif all([arg in kwargs for arg in ["ra", "dec"]]):
+                ra = kwargs["ra"]
+                dec = kwargs["dec"]
                 try:
-                    query = query.where(
-                        table.RA == ra,
-                        table.Dec == dec)
+                    query = query.where(table.RA == ra, table.Dec == dec)
 
                 except AttributeError:
-                    query = query.where(
-                        table.centerRa == ra,
-                        table.centerDec == dec
-                    )
+                    query = query.where(table.centerRa == ra, table.centerDec == dec)
             else:
-                raise ValueError("Coordinate arguments must be in triples (RA, Dec, radius) or tuples (RA, Dec)")
+                raise ValueError(
+                    "Coordinate arguments must be in triples (RA, Dec, radius) or tuples (RA, Dec)"
+                )
 
-        for key, value in [tup for tup in kwargs.items() if tup[0] not in ['ra', 'dec', 'radius']]:
+        for key, value in [
+            tup for tup in kwargs.items() if tup[0] not in ["ra", "dec", "radius"]
+        ]:
             query = query.where(getattr(table, key) == value)
 
         print(query)
@@ -242,12 +261,12 @@ class AstroSQL:
         try:
             query = table.select().where(
                 table.RA.between(ra - radius, ra + radius),
-                table.DEC.between(dec - radius, dec + radius)
+                table.DEC.between(dec - radius, dec + radius),
             )
         except AttributeError:
             query = table.select().where(
                 table.centerRa.between(ra - radius, ra + radius),
-                table.centerDec.between(dec - radius, dec + radius)
+                table.centerDec.between(dec - radius, dec + radius),
             )
 
         print(query.sql())
@@ -270,9 +289,13 @@ class AstroSQL:
             A list of rows as dict
         """
         pattern = r"^SELECT [^;]*;$"
-        assert len(self.tables) > 0, 'This database has no tables, there is nothing to select.'
-        assert re.match(pattern, query), "Query is invalid. It must be in the form of a typical SQL select statement " \
-                                         "like 'SELECT <expr> FROM <table> [...] ;"
+        assert (
+            len(self.tables) > 0
+        ), "This database has no tables, there is nothing to select."
+        assert re.match(pattern, query), (
+            "Query is invalid. It must be in the form of a typical SQL select statement "
+            "like 'SELECT <expr> FROM <table> [...] ;"
+        )
 
         model = list(self.tables.values())[0]
         print(query)
