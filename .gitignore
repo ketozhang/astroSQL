@@ -2,6 +2,7 @@
 .vscode/
 .venv/
 __pycache__/
+.egg-info/
 
 # Formats
 *.pyc
@@ -9,7 +10,6 @@ __pycache__/
 *.save
 *.swp
 *.wiki
-*.pytest_cache/
 
 # Specific Files
 poetry.lock

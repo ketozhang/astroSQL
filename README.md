@@ -1,5 +1,3 @@
-[![Build Status](https://travis-ci.org/ketozhang/astroSQL.svg?branch=master)](https://travis-ci.org/ketozhang/astroSQL)
-
 # astroSQL - Simple Database Tools for Python
 
 Simple Python API to access existing or create astronomy MySQL database.
@@ -11,9 +9,7 @@ Simple Python API to access existing or create astronomy MySQL database.
   - [x] read SQL database table
   - [x] update SQL database table
   - [x] SQL query using peewee ORM
-- **astroSQL** Shell Command
-  - [ ] query SQL database to text-based file
-  - [ ] update SQL database with text-based file
+
 
 ## System Dependencies
 
@@ -74,6 +70,11 @@ Simple Python API to access existing or create astronomy MySQL database.
 See [wiki](https://github.com/ketozhang/astroSQL/wiki):
 
 - [Python Usage](https://github.com/ketozhang/astroSQL/wiki/Python-Usage)
+
+## Abandoned Features
+- **astroSQL** Shell Command
+  - [ ] query SQL database to text-based file
+  - [ ] update SQL database with text-based file
 
 ## References
 

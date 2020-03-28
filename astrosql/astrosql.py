@@ -6,7 +6,7 @@ import re
 import warnings
 from pathlib import Path
 from pwiz import Introspector
-from astrosql.sqlconnector import connect
+from .sqlconnector import connect
 from pymysql import InternalError
 
 
