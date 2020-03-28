@@ -1,6 +1,6 @@
-# astroSQL - Simple Database Tools for Python
+# astroSQL
 
-Simple Python API to access existing or create astronomy MySQL database.
+SQL database introspection and methods in Python for existing astronomy databases.
 
 ## Features
 
