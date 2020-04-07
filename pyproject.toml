@@ -1,7 +1,7 @@
 [tool.poetry]
 name = "astrosql"
-version = "1.0.0"
-description = "Simple Python API to access existing astronomy MySQL database."
+version = "1.0.1"
+description = "SQL database introspection and methods in Python to access existing astronomy databases."
 authors = ["Keto Zhang <keto.zhang@gmail.com>"]
 license = "Apache-2.0"
 
