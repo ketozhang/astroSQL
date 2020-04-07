@@ -129,7 +129,7 @@ class AstroSQL:
             ).exists(), "{} is not a valid file path or does not exit".format(file)
         table = self.get_table(table)
 
-        df = pd.read_csv(file, header=None, sep="\s+", comment="#")``
+        df = pd.read_csv(file, header=None, sep="\s+", comment="#")
 
         print(
             "\nFirst few rows of data (",
